@@ -1,0 +1,26 @@
+{
+  "name": "sl_soft.2",
+  "version": "1.0.0",
+  "description": "sistema que nos permite realizar compras de prendas de vestir de manera ajil",
+  "main": "index.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeandroBadilloG/SL_soft.2.git"
+  },
+  "keywords": [
+    "node",
+    "js"
+  ],
+  "author": "Leandro Santiago",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeandroBadilloG/SL_soft.2/issues"
+  },
+  "homepage": "https://github.com/LeandroBadilloG/SL_soft.2#readme",
+  "dependencies": {
+    "Express": "^3.0.1"
+  }
+}
