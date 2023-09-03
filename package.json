@@ -4,7 +4,10 @@
   "description": "sistema que nos permite realizar compras de prendas de vestir de manera ajil",
   "main": "index.js",
   "scripts": {
-    "test": "start"
+    "test": "start",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
+
   },
   "repository": {
     "type": "git",
