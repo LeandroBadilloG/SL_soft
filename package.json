@@ -7,14 +7,12 @@
     "test": "start",
     "dev": "nodemon index.js",
     "start": "node index.js"
-
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LeandroBadilloG/SL_soft.2.git",
     "dev": "nodemon index.js",
     "start": "node index.js"
-
   },
   "keywords": [
     "node",

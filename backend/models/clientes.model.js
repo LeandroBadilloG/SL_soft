@@ -1,5 +1,5 @@
 const mongoose = require('../config/config');
-const shemnaClientes = new mongoose.Schema({
+const SchemnaClientes = new mongoose.Schema({
 
   nombre: {
     type: String,
@@ -32,5 +32,4 @@ const shemnaClientes = new mongoose.Schema({
   timestamps: true,
 
 });
-
-module.exports = mongoose.model('Factura', shemnaClientes);
+module.exports = mongoose.model('clientes', SchemnaClientes);
