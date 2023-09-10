@@ -1,6 +1,5 @@
-const mongoose = require('../config/config');
+const mongoose = require('../config/config.bd');
 const SchemnaProductos = new mongoose.Schema({
-
   nombre: {
     type: String,
     require: [true, 'Se requiere un nombre del producto'],
@@ -30,4 +29,5 @@ const SchemnaProductos = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('productos', SchemnaProductos);
+const nuevoProducto = mongoose.model('productos', SchemnaProductos);
+module.exports = nuevoProducto;

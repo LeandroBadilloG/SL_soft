@@ -1,6 +1,7 @@
-const funcionesProductos = require('../controller/usecases/controller.productos');
-
+const funcionesProductos = require('../controller/use-cases/use.productos');
 const express = require('express');
-const router = express.router();
+// eslint-disable-next-line new-cap
+const router = express.Router();
 
-router.get('/', funcionesProductos.registrarProductos);
+router.get('/', funcionesProductos.paginaInicioPrueva);
+router.post('/registro', funcionesProductos.guardaProducto);

@@ -26,7 +26,8 @@ const SchemnaClientes = new mongoose.Schema({
     default: 'Sin registrar direccion',
   },
   usuario: {
-    type: Schema.Type.Object,
+    type: Schema.Type.ObjectId,
+    // ref: usuarios,
   },
 
   timestamps: true,
