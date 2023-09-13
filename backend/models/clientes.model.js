@@ -33,4 +33,6 @@ const SchemnaClientes = new mongoose.Schema({
   timestamps: true,
 
 });
-module.exports = mongoose.model('clientes', SchemnaClientes);
+
+const nuevoCliente = mongoose.model('clientes', SchemnaClientes);
+module.exports = nuevoCliente;

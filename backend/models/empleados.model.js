@@ -28,6 +28,9 @@ const SchemaEmpleados = new mongoose.Schema({
   usuario: {
     type: Schema.Type.Object,
   },
-});
+  
+  timestamps: true,
 
-module.exports = mongoose.model('empleados', SchemaEmpleados);
+});
+const nuevoEmpleado = mongoose.model('empleados', SchemaEmpleados);
+module.exports = nuevoEmpleado;

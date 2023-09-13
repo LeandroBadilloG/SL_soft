@@ -8,14 +8,8 @@ exports.guardaProducto = async (datos) => {
   return await new Productos(datos).save();
 };
 
-exports.eliminarProducto = async (id) => {
-  return await Productos.findByIdAndDelete(id, function(err, docs) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Deleted: ', docs);
-    }
-  });
+exports.eliminarProducto = async (filtro) => {
+  return await Productos.findByIdAndRemove(filtro);
 };
 
 exports.actualizarProducto = async (id, datos) => {

@@ -6,15 +6,13 @@
   "scripts": {
     "test": "start",
     "dev": "nodemon index.js",
-    "start": "node index.js",
-    "lint": "eslint .  --ext .js",
-    "lint-fix": "eslint . --ext .js --fix"
+    "start": "node index",
+    "lint-fix": "eslint . --ext .js --fix",
+    "lint": "eslint .  --ext .js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LeandroBadilloG/SL_soft.2.git",
-    "dev": "nodemon index.js",
-    "start": "node index.js"
+    "url": "https://github.com/punky-11/SL_soft.git"
   },
   "keywords": [
     "node",
@@ -23,7 +21,7 @@
   "author": "Leandro Santiago",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/LeandroBadilloG/SL_soft.2/issues"
+    "url": "https://github.com/punky-11/SL_soft.git"
   },
   "homepage": "https://github.com/LeandroBadilloG/SL_soft.2#readme",
   "dependencies": {
@@ -32,7 +30,7 @@
     "dotenv": "^16.3.1",
     "ejs": "^3.1.9",
     "excel4node": "^1.8.2",
-    "express": "^3.0.1",
+    "express": "^4.18.2",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.4.5",
     "morgan": "^1.10.0",
@@ -41,7 +39,7 @@
     "router": "^1.3.8"
   },
   "devDependencies": {
-    "eslint": "^8.49.0",
+    "eslint": "^8.48.0",
     "eslint-config-google": "^0.14.0",
     "nodemon": "^3.0.1"
   }

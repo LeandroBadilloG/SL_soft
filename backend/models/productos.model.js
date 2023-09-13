@@ -25,8 +25,6 @@ const SchemnaProductos = new mongoose.Schema({
     requiere: [true, 'Se requiere una descripcion del producto'],
   },
 
-  timestamps: true,
-
 });
 
 const nuevoProducto = mongoose.model('productos', SchemnaProductos);

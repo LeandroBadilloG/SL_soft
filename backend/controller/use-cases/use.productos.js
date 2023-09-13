@@ -2,7 +2,7 @@ const Data = require('../data-access/data.productos');
 
 exports.buscarProducto = async (req, res) => {
   try {
-    const filtro = {nombre: req.body};
+    const filtro = {nombre: req.body.nombre};
     const productos = await Data.buscarProducto(filtro);
 
     res.status(200).json({resutados: productos});
@@ -25,9 +25,10 @@ exports.actualizarProductos = async (req, res) => {
 
 exports.guardaProducto = async (req, res) => {
   try {
-    const {referencia} = req.body;
-    const verificacion = await Data.buscarProducto(referencia);
-    if (verificacion != null) {
+    const filtro = {referencia: req.body.referencia}
+    const verificacion = await Data.buscarProducto(filtro);
+    console.log('el producto encontrado fue ' + verificacion);
+    if (verificacion.length == 0) {
       await Data.guardaProducto(req.body);
       res.status(200).json({mensaje: 'Producto guardado'});
     } else {
@@ -41,8 +42,9 @@ exports.guardaProducto = async (req, res) => {
 
 exports.eliminarProducto = async (req, res) => {
   try {
-    const resultado = await Data.eliminarProducto(req.params.id, req.body);
-
+    console.log(req.paramas)
+    const filtro = {_id: req.params.id}
+    const resultado = await Data.eliminarProducto(filtro);
     if (resultado) {
       res.status(200).json({mensaje: 'Producto eliminado'});
     } else {
@@ -55,6 +57,8 @@ exports.eliminarProducto = async (req, res) => {
   }
 };
 
-exports.paginaInicioPrueva = (req, res) => {
-  res.render('inicio');
+exports.paginaInicioPrueba = async (req, res) => {
+  res.render('inicio',{
+    productos: await Data.buscarProducto()
+  });
 };
