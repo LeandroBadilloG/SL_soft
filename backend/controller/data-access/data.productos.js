@@ -9,7 +9,7 @@ exports.guardaProducto = async (datos) => {
 };
 
 exports.eliminarProducto = async (filtro) => {
-  return await Productos.findByIdAndRemove(filtro);
+  return await Productos.findByIdAndDelete(filtro);
 };
 
 exports.actualizarProducto = async (id, datos) => {

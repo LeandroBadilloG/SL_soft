@@ -2,7 +2,7 @@ const Data = require('../data-access/data.clientes');
 
 exports.buscarCliente = async (req, res) => {
   try {
-    const filtro = req.body;
+    const filtro = {nombre: req.body.nombre};
     const clientes = await Data.buscarCliente(filtro);
 
     res.status(200).json({resultados: clientes});
@@ -14,7 +14,9 @@ exports.buscarCliente = async (req, res) => {
 
 exports.actualizarCliente = async (req, res) => {
   try {
-    await Data.actualizarCliente(req.paramas.id, req.body);
+    filtro= {_id: req.params.id};
+    datos= {}
+    await Data.actualizarCliente(filtro, datos);
 
     res.status(200).json({mensaje: 'Cliente actualizado'});
   } catch (error) {

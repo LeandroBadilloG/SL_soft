@@ -14,7 +14,15 @@ exports.buscarProducto = async (req, res) => {
 
 exports.actualizarProductos = async (req, res) => {
   try {
-    await Data.actualizarProducto(req.paramas.id, req.body);
+    const filtro ={_id: req.params.id };
+    const datos ={
+      nombre: req.body.nombre,
+      talla: req.body.talla,
+      referencia: req.body.referencia,
+      precio: req.body.precio,
+      descripcion: req.body.descripcion,
+    }
+    await Data.actualizarProducto(filtro, datos);
 
     res.status(200).json({mensaje: 'Producto actualizado'});
   } catch (error) {
@@ -42,14 +50,9 @@ exports.guardaProducto = async (req, res) => {
 
 exports.eliminarProducto = async (req, res) => {
   try {
-    console.log(req.paramas)
     const filtro = {_id: req.params.id}
-    const resultado = await Data.eliminarProducto(filtro);
-    if (resultado) {
-      res.status(200).json({mensaje: 'Producto eliminado'});
-    } else {
-      res.status(404).json({mensaje: 'Producto no encontrado'});
-    }
+    await Data.eliminarProducto(filtro);
+    res.status(200).json({mensaje: 'Producto eliminado'});
   } catch (error) {
     console.error(error);
 
@@ -58,7 +61,9 @@ exports.eliminarProducto = async (req, res) => {
 };
 
 exports.paginaInicioPrueba = async (req, res) => {
+  const filtro = {nombre: req.body.nombre};
   res.render('inicio',{
-    productos: await Data.buscarProducto()
+    productos: await Data.buscarProducto(),
+    filtroProductos: await Data.buscarProducto(filtro)
   });
 };

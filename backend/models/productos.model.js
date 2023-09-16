@@ -3,6 +3,8 @@ const SchemnaProductos = new mongoose.Schema({
   nombre: {
     type: String,
     require: [true, 'Se requiere un nombre del producto'],
+    max: 30,
+    min: 1,
   },
   talla: {
     type: String,
@@ -23,9 +25,11 @@ const SchemnaProductos = new mongoose.Schema({
   descripcion: {
     type: String,
     requiere: [true, 'Se requiere una descripcion del producto'],
-  },
+  }
 
-});
+}
+, {timestamps: true}
+);
 
 const nuevoProducto = mongoose.model('productos', SchemnaProductos);
 module.exports = nuevoProducto;
