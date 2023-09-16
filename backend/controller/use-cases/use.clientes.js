@@ -15,7 +15,7 @@ exports.buscarCliente = async (req, res) => {
 exports.actualizarCliente = async (req, res) => {
   try {
     filtro= {_id: req.params.id};
-    datos= {}
+    datos= {};
     await Data.actualizarCliente(filtro, datos);
 
     res.status(200).json({mensaje: 'Cliente actualizado'});

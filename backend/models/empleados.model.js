@@ -3,15 +3,19 @@ const SchemaEmpleados = new mongoose.Schema({
   nombre: {
     type: String,
     require: [true, 'Se requiere un nombre del empleado.'],
+    min: 2,
+    max: 30,
   },
   apellido: {
     type: String,
     require: [true, 'Se requiere un apellido del empleado'],
+    min: 2,
+    max: 30,
   },
   documento: {
     type: String,
     require: [true, 'Se requiere un documento del empleado'],
-
+    min: 7,
   },
   correo: {
     type: Strintg,
@@ -28,9 +32,8 @@ const SchemaEmpleados = new mongoose.Schema({
   usuario: {
     type: Schema.Type.Object,
   },
-  
-  timestamps: true,
-
-});
+},
+{timestamps: true},
+);
 const nuevoEmpleado = mongoose.model('empleados', SchemaEmpleados);
 module.exports = nuevoEmpleado;

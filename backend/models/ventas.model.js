@@ -32,7 +32,7 @@ const SchemaVenta = new mongoose.Schema({
     type: String,
     default: 'aprobado',
   },
-  timestamps
+  timestamps,
 });
 
 const nuevaVenta = mongoose.model('ventas', SchemaVenta);

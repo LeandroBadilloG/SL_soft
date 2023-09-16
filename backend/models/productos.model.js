@@ -25,10 +25,14 @@ const SchemnaProductos = new mongoose.Schema({
   descripcion: {
     type: String,
     requiere: [true, 'Se requiere una descripcion del producto'],
-  }
+  },
+  categoria: {
+    type: String,
+    requiere: [true, 'Se requiere una referencia del producto'],
+  },
 
 }
-, {timestamps: true}
+, {timestamps: true},
 );
 
 const nuevoProducto = mongoose.model('productos', SchemnaProductos);

@@ -14,14 +14,14 @@ exports.buscarProducto = async (req, res) => {
 
 exports.actualizarProductos = async (req, res) => {
   try {
-    const filtro ={_id: req.params.id };
+    const filtro ={_id: req.params.id};
     const datos ={
       nombre: req.body.nombre,
       talla: req.body.talla,
       referencia: req.body.referencia,
       precio: req.body.precio,
       descripcion: req.body.descripcion,
-    }
+    };
     await Data.actualizarProducto(filtro, datos);
 
     res.status(200).json({mensaje: 'Producto actualizado'});
@@ -33,7 +33,7 @@ exports.actualizarProductos = async (req, res) => {
 
 exports.guardaProducto = async (req, res) => {
   try {
-    const filtro = {referencia: req.body.referencia}
+    const filtro = {referencia: req.body.referencia};
     const verificacion = await Data.buscarProducto(filtro);
     console.log('el producto encontrado fue ' + verificacion);
     if (verificacion.length == 0) {
@@ -50,7 +50,7 @@ exports.guardaProducto = async (req, res) => {
 
 exports.eliminarProducto = async (req, res) => {
   try {
-    const filtro = {_id: req.params.id}
+    const filtro = {_id: req.params.id};
     await Data.eliminarProducto(filtro);
     res.status(200).json({mensaje: 'Producto eliminado'});
   } catch (error) {
@@ -62,8 +62,8 @@ exports.eliminarProducto = async (req, res) => {
 
 exports.paginaInicioPrueba = async (req, res) => {
   const filtro = {nombre: req.body.nombre};
-  res.render('inicio',{
+  res.render('inicio', {
     productos: await Data.buscarProducto(),
-    filtroProductos: await Data.buscarProducto(filtro)
+    filtroProductos: await Data.buscarProducto(filtro),
   });
 };

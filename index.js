@@ -6,8 +6,8 @@ const path = require('path');
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'frontend/views/pages'));
 
-const dotdev = require('dotenv');
-dotdev.config();
+const dotenv = require('dotenv');
+dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
