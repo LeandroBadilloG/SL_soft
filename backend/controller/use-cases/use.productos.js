@@ -15,9 +15,11 @@ exports.actualizarProductos = async (req, res) => {
     const filtro ={_id: req.params.id};
     const cantidadPorTallas = req.body.talla;
     let cantidadTotal= 0;
-    for(let posicion in cantidadPorTallas){
-      cantidadTotal+= cantidadPorTallas[posicion];
-    };
+    for (const talla in cantidadPorTallas) {
+      if (cantidadPorTallas.hasOwnProperty(talla)) {
+        cantidadTotal += cantidadPorTallas[talla];
+      }
+    }
     const datos= {
       nombre: req.body.nombre,
       talla: req.body.talla,
@@ -26,8 +28,7 @@ exports.actualizarProductos = async (req, res) => {
       descripcion: req.body.descripcion,
       cantidad: cantidadTotal,
       categoria: req.body.categoria,
-    }
-    console.log(datos)
+    };
     await Data.actualizarProducto(filtro, datos);
     res.status(200).json({mensaje: 'Producto actualizado', productoN});
   } catch (error) {
@@ -43,9 +44,11 @@ exports.guardaProducto = async (req, res) => {
     if (verificacion.length == 0) {
       const cantidadPorTallas = req.body.talla;
       let cantidadTotal= 0;
-      for(let posicion in cantidadPorTallas){
-        cantidadTotal+= cantidadPorTallas[posicion];
-      };
+      for (const talla in cantidadPorTallas) {
+        if (cantidadPorTallas.hasOwnProperty(talla)) {
+          cantidadTotal += cantidadPorTallas[talla];
+        }
+      }
       console.log(cantidadPorTallas);
       const datos= {
         nombre: req.body.nombre,
@@ -55,7 +58,7 @@ exports.guardaProducto = async (req, res) => {
         descripcion: req.body.descripcion,
         cantidad: cantidadTotal,
         categoria: req.body.categoria,
-      }
+      };
       await Data.guardaProducto(datos);
       res.status(200).json({mensaje: 'Producto guardado'});
     } else {

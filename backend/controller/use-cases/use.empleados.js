@@ -4,7 +4,6 @@ const DataUsuarios= require('../data-access/data.usuarios');
 
 exports.listarEmpleado = async (req, res) => {
   try {
-
     const empleados = await DataEmpleados.buscarEmpleados();
 
     res.status(200).json({resultados: empleados});
@@ -16,8 +15,8 @@ exports.listarEmpleado = async (req, res) => {
 
 exports.actualizarEmpleado = async (req, res) => {
   try {
-    const filtro= {_id: req.paramas.id}
-    await DataEmpleados.actualizarEmpleados(filtro,);
+    const filtro= {_id: req.paramas.id};
+    await DataEmpleados.actualizarEmpleados(filtro);
 
     res.status(200).json({mensaje: 'Empleado actualizado'});
   } catch (error) {
@@ -30,7 +29,9 @@ exports.guardarEmpleado = async (req, res) => {
   try {
     const filtro= {correo: req.body.correo};
     const verificacion= await DataEmpleados.buscarEmpleados(filtro);
-    if(verificacion.length === 0){
+    if (verificacion.suceso) {
+      return res.status(500).json({mensaje: 'El correo ya esta en uso'});
+    } else {
       const datosEmpleado= {
         nombre: req.body.nombre,
         apellido: req.body.apellido,
@@ -38,16 +39,16 @@ exports.guardarEmpleado = async (req, res) => {
         correo: req.body.correo,
         cargo: req.body.cargo,
       };
-      const datosUsuario= {
-        correo: req.body.correo,
-        password: req.body.password,
-        rol: req.body.rol,
+      const nuevoEmpleado = await DataEmpleados.registrarEmpleados(datosEmpleado);
+      if (nuevoEmpleado.suceso) {
+        const datosUsuario= {
+          correo: req.body.correo,
+          password: req.body.password,
+          rol: req.body.rol,
+        };
+        await DataUsuarios.guardaUsuario(datosUsuario);
+        return res.status(200).json({mensaje: 'Empleado registrado'});
       }
-      await DataUsuarios.guardaUsuario(datosUsuario);
-      await DataEmpleados.registrarEmpleados(datosEmpleado);
-      res.status(200).json({mensaje: 'Empleado registrado'});
-    }else {
-      res.status(500).json({mensaje: filtro+' Ya esta en uso'});
     }
   } catch (error) {
     console.error(error);

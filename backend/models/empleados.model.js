@@ -34,13 +34,13 @@ const SchemaEmpleados = new mongoose.Schema({
   },
   usuario: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'usuarios.model', 
+    ref: 'usuarios.model',
   },
 }, {
   timestamps: true,
 });
 
-const nuevoEmpleado = mongoose.model('Empleado', SchemaEmpleados); 
+const nuevoEmpleado = mongoose.model('Empleado', SchemaEmpleados);
 
 module.exports = nuevoEmpleado;
 
