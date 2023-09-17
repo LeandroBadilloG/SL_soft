@@ -1,20 +1,22 @@
-const mongoose = require('../config/config');
-const SchemaUsuarios = new mongoose.Schema({
+const mongoose = require('../config/config.bd');
 
-  email: {
+const SchemaUsuarios = new mongoose.Schema({
+  correo: {
     type: String,
-    require: [true, 'Se requiere un correo'],
+    required: [true, 'Se requiere un correo'],
     unique: true,
   },
   password: {
     type: String,
-    require: [true, 'Se requiere una contraseña'],
+    required: [true, 'Se requiere una contraseña'],
+    minlength: 8,
   },
   rol: {
     type: String,
-    require: [true, 'Se requiere un rol'],
+    required: [true, 'Se requiere un rol'],
   },
+}, {timestamps: true});
 
-});
-const nuevoUsuario= mongoose.model('usuarios', SchemaUsuarios);
+const nuevoUsuario = mongoose.model('Usuario', SchemaUsuarios);
+
 module.exports = nuevoUsuario;

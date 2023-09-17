@@ -2,21 +2,24 @@ const mongoose = require('../config/config.bd');
 const SchemnaProductos = new mongoose.Schema({
   nombre: {
     type: String,
-    require: [true, 'Se requiere un nombre del producto'],
+    required: [true, 'Se requiere un nombre del producto'],
     max: 30,
     min: 1,
   },
   talla: {
-    type: String,
-    require: [true, 'Se requiere una talla del producto'],
+    type: Object,
+    required: [true, 'Se requiere una talla del producto'],
+    minlength: 1,
   },
   referencia: {
     type: String,
     requiere: [true, 'Se requiere una Referencia del producto'],
+    unique: true,
+    min: 2,
   },
   cantidad: {
-    type: String,
-    require: [true, 'Se requiere espesificar la cantidad de productos'],
+    type: Number,
+    required: [true, 'Se requiere espesificar la cantidad de productos'],
   },
   precio: {
     type: Number,
@@ -25,6 +28,8 @@ const SchemnaProductos = new mongoose.Schema({
   descripcion: {
     type: String,
     requiere: [true, 'Se requiere una descripcion del producto'],
+    min: 10,
+    max: 100,
   },
   categoria: {
     type: String,

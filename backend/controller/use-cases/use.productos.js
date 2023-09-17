@@ -1,10 +1,8 @@
 const Data = require('../data-access/data.productos');
 
-exports.buscarProducto = async (req, res) => {
+exports.listarProductos = async (req, res) => {
   try {
-    const filtro = {nombre: req.body.nombre};
-    const productos = await Data.buscarProducto(filtro);
-
+    const productos = await Data.buscarProducto();
     res.status(200).json({resutados: productos});
   } catch (error) {
     console.error(error);
@@ -15,16 +13,23 @@ exports.buscarProducto = async (req, res) => {
 exports.actualizarProductos = async (req, res) => {
   try {
     const filtro ={_id: req.params.id};
-    const datos ={
+    const cantidadPorTallas = req.body.talla;
+    let cantidadTotal= 0;
+    for(let posicion in cantidadPorTallas){
+      cantidadTotal+= cantidadPorTallas[posicion];
+    };
+    const datos= {
       nombre: req.body.nombre,
       talla: req.body.talla,
       referencia: req.body.referencia,
       precio: req.body.precio,
       descripcion: req.body.descripcion,
-    };
+      cantidad: cantidadTotal,
+      categoria: req.body.categoria,
+    }
+    console.log(datos)
     await Data.actualizarProducto(filtro, datos);
-
-    res.status(200).json({mensaje: 'Producto actualizado'});
+    res.status(200).json({mensaje: 'Producto actualizado', productoN});
   } catch (error) {
     console.error(error);
     res.status(500).json({mensaje: 'Ocurrio un error'});
@@ -35,9 +40,23 @@ exports.guardaProducto = async (req, res) => {
   try {
     const filtro = {referencia: req.body.referencia};
     const verificacion = await Data.buscarProducto(filtro);
-    console.log('el producto encontrado fue ' + verificacion);
     if (verificacion.length == 0) {
-      await Data.guardaProducto(req.body);
+      const cantidadPorTallas = req.body.talla;
+      let cantidadTotal= 0;
+      for(let posicion in cantidadPorTallas){
+        cantidadTotal+= cantidadPorTallas[posicion];
+      };
+      console.log(cantidadPorTallas);
+      const datos= {
+        nombre: req.body.nombre,
+        talla: req.body.talla,
+        referencia: req.body.referencia,
+        precio: req.body.precio,
+        descripcion: req.body.descripcion,
+        cantidad: cantidadTotal,
+        categoria: req.body.categoria,
+      }
+      await Data.guardaProducto(datos);
       res.status(200).json({mensaje: 'Producto guardado'});
     } else {
       res.status(500).json({mensaje: 'La referencia ya existe'});
@@ -60,10 +79,10 @@ exports.eliminarProducto = async (req, res) => {
   }
 };
 
-exports.paginaInicioPrueba = async (req, res) => {
-  const filtro = {nombre: req.body.nombre};
-  res.render('inicio', {
-    productos: await Data.buscarProducto(),
-    filtroProductos: await Data.buscarProducto(filtro),
-  });
-};
+// exports.paginaInicioPrueba = async (req, res) => {
+//   const filtro = {nombre: req.body.nombre};
+//   res.render('inicio', {
+//     productos: await Data.buscarProducto(),
+//     filtroProductos: await Data.buscarProducto(filtro),
+//   });
+// };

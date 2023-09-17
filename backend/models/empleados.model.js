@@ -1,39 +1,46 @@
-const mongoose = require('../config/config');
+const mongoose = require('../config/config.bd');
+
 const SchemaEmpleados = new mongoose.Schema({
   nombre: {
     type: String,
-    require: [true, 'Se requiere un nombre del empleado.'],
-    min: 2,
-    max: 30,
+    required: [true, 'Se requiere un nombre del empleado.'],
+    minlength: 2,
+    maxlength: 30,
   },
   apellido: {
     type: String,
-    require: [true, 'Se requiere un apellido del empleado'],
-    min: 2,
-    max: 30,
+    required: [true, 'Se requiere un apellido del empleado'],
+    minlength: 2,
+    maxlength: 30,
   },
   documento: {
     type: String,
-    require: [true, 'Se requiere un documento del empleado'],
-    min: 7,
+    required: [true, 'Se requiere un documento del empleado'],
+    unique: true,
+    minlength: 7,
   },
   correo: {
-    type: Strintg,
-    require: [true, 'Se requiere un correo'],
+    type: String,
+    required: [true, 'Se requiere un correo'],
+    unique: true,
   },
   cargo: {
     type: String,
-    require: [true, 'Se deve espesificar que cargo tiene el trabajador'],
+    required: [true, 'Se debe especificar qué cargo tiene el trabajador'],
   },
   estado: {
     type: Boolean,
-    undefined: true,
+    default: true,
   },
   usuario: {
-    type: Schema.Type.Object,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'usuarios.model', 
   },
-},
-{timestamps: true},
-);
-const nuevoEmpleado = mongoose.model('empleados', SchemaEmpleados);
+}, {
+  timestamps: true,
+});
+
+const nuevoEmpleado = mongoose.model('Empleado', SchemaEmpleados); 
+
 module.exports = nuevoEmpleado;
+

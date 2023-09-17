@@ -4,11 +4,11 @@ const SchemaVenta = new mongoose.Schema({
     {
       nombre: {
         type: String,
-        require: [true, 'Se requiere un nombre del cliente'],
+        required: [true, 'Se requiere un nombre del cliente'],
       },
       apellido: {
         type: String,
-        require: [true, 'Se requiere los apellido del cliente'],
+        required: [true, 'Se requiere los apellido del cliente'],
       },
       celular: {
         type: String,
@@ -26,7 +26,7 @@ const SchemaVenta = new mongoose.Schema({
   },
   metodoPago: {
     type: String,
-    require: [true, 'Se deve espesificar un metodo de pago'],
+    required: [true, 'Se deve espesificar un metodo de pago'],
   },
   pedido: {
     type: String,

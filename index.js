@@ -15,8 +15,11 @@ app.use(morgan('dev'));
 
 app.use(express.urlencoded({extended: true}));
 
-const router = require('./backend/routes/rutes');
-app.use('/', router);
+const rutasProductos = require('./backend/routes/rutas.productos');
+app.use('/v1/productos', rutasProductos);
+
+const rutasEmpleados = require('./backend/routes/rutas.empleados');
+app.use('/v1/empleados', rutasEmpleados);
 
 app.use(morgan('dev'));
 
