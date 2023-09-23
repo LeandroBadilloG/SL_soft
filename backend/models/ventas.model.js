@@ -1,9 +1,9 @@
 const mongoose = require('../config/config.bd');
 const SchemaVenta = new mongoose.Schema({
-  cliente: {
+  cliente: [{
     type: Object,
     required: [true, 'Se requiere la informacion del usiario'],
-  },
+  }],
   productos: {
     type: Object,
     required: [true, 'Se requiere almenos un producto'],

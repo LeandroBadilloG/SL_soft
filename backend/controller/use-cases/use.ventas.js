@@ -1,6 +1,6 @@
 const DataVentas = require('../data-access/data.ventas');
 const DataCliente = require('../data-access/data.clientes');
-// const DataProductos = require('../data-access/data.productos');
+const DataProductos = require('../data-access/data.productos');
 
 exports.buscarVenta = async (req, res) => {
   try {
@@ -33,24 +33,31 @@ exports.guardaVenta = async (req, res) => {
     const datosNorequeridos = {'updatedAt': 0, 'createdAt': 0, '_id': 0, '__v': 0};
     const infoCliente = await DataCliente.buscarCliente(idCliente, datosNorequeridos);
     if (infoCliente) {
-      const subtotal= req.body.precio * req.body.cantidad;
-      const total= subtotal;
-      console.log(total);
-      const dato = {
-        cliente: infoCliente,
-        productos: {
-          referencia: req.body.referencia,
-          nombre: req.body.nombre,
-          precio: req.body.precio,
-          cantidad: req.body.cantidad,
-          talla: req.body.talla,
-        },
-        subtotal: subtotal,
-        totalPago: total,
-        metodoPago: req.body.metodoPago,
-      };
-      const venta = await DataVentas.guardaVenta(dato);
-      res.status(200).json({V: venta});
+      const filtro = {referencia: req.body.productos.referencia};
+      const datos = {'precio': 1, '_id': 0};
+      const producto = await DataProductos.buscarProducto(filtro, datos);
+      if (producto.exito === false) {
+        res.status(500).json({mensaje: 'No se encontro la informacion del producto'});
+      } else {
+        // console.log(subtotal);
+        console.log(producto);
+        const dato = {
+          cliente: infoCliente,
+          productos: [{
+            referencia: req.body.productos.referencia,
+            precio: producto.precio,
+            cantidad: req.body.productos.cantidad,
+            talla: req.body.productos.talla,
+          }],
+          subtotal: req.body.subtotal,
+          totalPago: req.body.total,
+          metodoPago: req.body.metodoPago,
+        };
+        const venta = await DataVentas.guardaVenta(dato);
+        if (venta) {
+          res.status(200).json({Venta: venta});
+        }
+      }
     } else {
       res.status(500).json({mensaje: 'No se encontro la informacion del cliente'});
     }
