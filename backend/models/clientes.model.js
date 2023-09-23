@@ -1,4 +1,4 @@
-const mongoose = require('../config/config');
+const mongoose = require('../config/config.bd');
 const SchemnaClientes = new mongoose.Schema({
 
   nombre: {
@@ -35,13 +35,11 @@ const SchemnaClientes = new mongoose.Schema({
     default: 'Sin registrar direccion',
   },
   usuario: {
-    type: Schema.Type.ObjectId,
-    // ref: usuarios,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'usuarios.model',
   },
 
-  timestamps: true,
-
-});
+}, {timestamps: true});
 
 const nuevoCliente = mongoose.model('clientes', SchemnaClientes);
 module.exports = nuevoCliente;

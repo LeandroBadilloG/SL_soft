@@ -1,15 +1,13 @@
-const Data = require('../data-access/data.clientes');
+const DataCliente = require('../data-access/data.clientes');
 
 exports.buscarCliente = async (req, res) => {
   try {
-    const filtro = {nombre: req.body.nombre};
-    const clientes = await Data.buscarCliente(filtro);
-
-    res.status(200).json({resultados: clientes});
+    const filtro = req.body;
+    const clientes = await DataCliente.buscarClientes(filtro);
+    res.json({clientes: clientes});
   } catch (error) {
-    console.error(error);
-    res.status(500).json({mensaje: 'Ocurrio un error.'});
-  };
+    console.log(error);
+  }
 };
 
 exports.actualizarCliente = async (req, res) => {

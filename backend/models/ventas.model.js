@@ -1,39 +1,31 @@
-const mongoose = require('../config/config');
+const mongoose = require('../config/config.bd');
 const SchemaVenta = new mongoose.Schema({
-  cliente: [
-    {
-      nombre: {
-        type: String,
-        required: [true, 'Se requiere un nombre del cliente'],
-      },
-      apellido: {
-        type: String,
-        required: [true, 'Se requiere los apellido del cliente'],
-      },
-      celular: {
-        type: String,
-        default: 'Sin registrar numero celular',
-      },
-      direccion: {
-        type: String,
-        default: 'Sin registrar direccion',
-      },
-    },
-  ],
+  cliente: {
+    type: Object,
+    required: [true, 'Se requiere la informacion del usiario'],
+  },
+  productos: {
+    type: Object,
+    required: [true, 'Se requiere almenos un producto'],
+    minlength: 1,
+  },
+  subtotal: {
+    type: Number,
+    required: [true, 'Se deve espesificar un sub total de los productos'],
+  },
   iva: {
     type: Number,
-    default: 'Sin IVA',
+    default: 19,
+  },
+  totalPago: {
+    type: Number,
+    required: [true, 'Se deve espesificar el total de la compra'],
   },
   metodoPago: {
     type: String,
     required: [true, 'Se deve espesificar un metodo de pago'],
   },
-  pedido: {
-    type: String,
-    default: 'aprobado',
-  },
-  timestamps,
-});
+}, {timestamps: true} );
 
 const nuevaVenta = mongoose.model('ventas', SchemaVenta);
 module.exports =nuevaVenta;
