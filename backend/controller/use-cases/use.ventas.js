@@ -34,8 +34,7 @@ exports.guardaVenta = async (req, res) => {
     const infoCliente = await DataCliente.buscarCliente(idCliente, datosNorequeridos);
     if (infoCliente) {
       const filtro = {referencia: req.body.productos.referencia};
-      const datos = {'precio': 1, '_id': 0};
-      const producto = await DataProductos.buscarProducto(filtro, datos);
+      const producto = await DataProductos.buscarProducto(filtro);
       if (producto.exito === false) {
         res.status(500).json({mensaje: 'No se encontro la informacion del producto'});
       } else {
@@ -45,17 +44,19 @@ exports.guardaVenta = async (req, res) => {
           cliente: infoCliente,
           productos: [{
             referencia: req.body.productos.referencia,
-            precio: producto.precio,
+            precio: req.body.productos,
             cantidad: req.body.productos.cantidad,
             talla: req.body.productos.talla,
           }],
           subtotal: req.body.subtotal,
-          totalPago: req.body.total,
+          totalPago: req.body.totalPago,
           metodoPago: req.body.metodoPago,
         };
         const venta = await DataVentas.guardaVenta(dato);
         if (venta) {
           res.status(200).json({Venta: venta});
+        } else {
+          res.status(500).json({mensaje: 'No fue posible registrar la venta'});
         }
       }
     } else {

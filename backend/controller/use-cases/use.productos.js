@@ -47,30 +47,17 @@ exports.actualizarProductos = async (req, res) => {
 
 exports.guardaProducto = async (req, res) => {
   try {
-    const filtro = {referencia: req.body.referencia};
-    const verificacion = await Data.buscarProducto(filtro);
-    if (verificacion.exito === false) {
-      const cantidadPorTallas = req.body.talla;
-      let cantidadTotal= 0;
-      for (const talla in cantidadPorTallas) {
-        if (cantidadPorTallas.hasOwnProperty(talla)) {
-          cantidadTotal += cantidadPorTallas[talla];
-        }
-      }
-      const datos= {
-        nombre: req.body.nombre,
-        talla: req.body.talla,
-        referencia: req.body.referencia,
-        precio: req.body.precio,
-        descripcion: req.body.descripcion,
-        cantidad: cantidadTotal,
-        categoria: req.body.categoria,
-      };
-      await Data.guardaProducto(datos);
-      res.status(200).json({mensaje: 'Producto guardado'});
-    } else {
-      res.status(500).json({mensaje: 'La referencia ya existe'});
+    const datos= {
+      nombre: req.body.nombre,
+      talla: req.body.talla,
+      referencia: req.body.referencia,
+      precio: req.body.precio,
+      descripcion: req.body.descripcion,
+      cantidad: req.body.cantidad,
+      categoria: req.body.categoria,
     };
+    await Data.guardaProducto(datos);
+    res.status(200).json({mensaje: 'Producto guardado'});
   } catch (error) {
     console.error(error);
     res.status(500).json({mensaje: 'Ocurrio un error'});

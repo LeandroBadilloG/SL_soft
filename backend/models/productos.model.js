@@ -7,14 +7,13 @@ const SchemnaProductos = new mongoose.Schema({
     min: 1,
   },
   talla: {
-    type: Object,
+    type: String,
     required: [true, 'Se requiere una talla del producto'],
     minlength: 1,
   },
   referencia: {
     type: String,
     requiere: [true, 'Se requiere una Referencia del producto'],
-    unique: true,
     min: 2,
   },
   cantidad: {
