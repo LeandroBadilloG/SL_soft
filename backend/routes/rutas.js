@@ -16,6 +16,6 @@ router.get('/eliminarEmpleado/:id', funcionesEmpleados.eliminarEmpleado);
 router.post('/registrarEmpleado', funcionesEmpleados.registrarEmpleado);
 router.post('/actualizarEmpleado/:id', funcionesEmpleados.actualizarEmpleado);
 
-router.post('/registrarventa', funcionesVentas.guardaVenta);
+router.post('/registrarVenta', funcionesVentas.guardaVenta);
 
 module.exports = router;
