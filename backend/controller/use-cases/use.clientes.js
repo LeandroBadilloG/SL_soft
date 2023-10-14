@@ -1,9 +1,9 @@
 const DataCliente = require('../data-access/data.clientes');
 
-exports.buscarCliente = async (req, res) => {
+exports.listarCliente = async (req, res) => {
   try {
     const filtro = req.body;
-    const clientes = await DataCliente.buscarClientes(filtro);
+    const clientes = await DataCliente.listarCliente(filtro);
     res.json({clientes: clientes});
   } catch (error) {
     console.log(error);
@@ -28,7 +28,7 @@ exports.registrarCliente = async (req, res) => {
     const {documento} = req.body;
     const verificacion= await Data.buscarCliente(documento);
 
-    if (verificacion != null) {
+    if (!verificacion) {
       await Data.registrarCliente(req.body);
       res.status(200).json({mensaje: 'Cliente registrado'});
     } else {

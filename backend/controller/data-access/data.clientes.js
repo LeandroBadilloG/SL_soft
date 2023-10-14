@@ -1,7 +1,7 @@
 const Clientes = require('../../models/clientes.model');
 // const Usuarios = require('../../models/usuarios.model');
 
-exports.buscarCliente = async (filtro, opciones) => {
+exports.listarCliente = async (filtro, opciones) => {
   try {
     const clientes = await Clientes.find(filtro, opciones);
     return clientes;

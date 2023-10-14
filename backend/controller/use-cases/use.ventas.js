@@ -30,43 +30,53 @@ exports.actualizarVentas = async (req, res) => {
 exports.guardaVenta = async (req, res) => {
   try {
     const idCliente = {_id: req.body.cliente};
-    const datosNorequeridos = {'updatedAt': 0, 'createdAt': 0, '_id': 0, '__v': 0};
-    const infoCliente = await DataCliente.buscarCliente(idCliente, datosNorequeridos);
-    if (infoCliente) {
-      const listaProductos= [];
-      const productos= req.body.productos;
-      for (let i=0; i < productos.length; i++) {
-        const filtro = {_id: productos[i]};
-        const datos = {'cantidad': 0, '_id': 0, '__v': 0, 'updatedAt': 0, 'createdAt': 0};
-        const producto = await DataProductos.buscarProducto(filtro, datos);
-        if (producto.exito === false) {
-          res.status(500).json({mensaje: 'No se encontro la informacion del producto'});
-        } else {
-          listaProductos= producto + producto;
-        }
+    const datosNoRequeridos = {updatedAt: 0, createdAt: 0, _id: 0, __v: 0};
+
+    const infoCliente = await DataCliente.buscarCliente(idCliente, datosNoRequeridos);
+
+    if (!infoCliente) {
+      return res.status(500).json({mensaje: 'No se encontró la información del cliente'});
+    }
+
+    const productos = req.body.productos;
+    const listaProductos = [];
+
+    for (const productoId of productos) {
+      const filtro = {_id: productoId};
+      const datosProducto = {cantidad: 0, _id: 0, __v: 0, updatedAt: 0, createdAt: 0};
+
+      const producto = await DataProductos.buscarProducto(filtro, datosProducto);
+
+      if (!producto) {
+        return res.status(500).json({mensaje: 'No se encontró la información del producto'});
       }
-      const dato = {
-        cliente: infoCliente,
-        productos: listaProductos,
-        subtotal: req.body.subtotal,
-        totalPago: req.body.totalPago,
-        metodoPago: req.body.metodoPago,
-      };
-      const venta = await DataVentas.guardaVenta(dato);
-      if (venta) {
-        res.status(200).json({Venta: venta});
-      } else {
-        res.status(500).json({mensaje: 'No fue posible registrar la venta'});
-      }
+
+      listaProductos.push({
+        nombre: producto.nombre,
+        talla: producto.talla,
+      });
+    }
+
+    const ventaData = {
+      cliente: infoCliente,
+      productos: listaProductos,
+      subtotal: req.body.subtotal,
+      totalPago: req.body.totalPago,
+      metodoPago: req.body.metodoPago,
+    };
+
+    const venta = await DataVentas.guardaVenta(ventaData);
+
+    if (venta) {
+      res.status(200).json({Venta: venta});
     } else {
-      res.status(500).json({mensaje: 'No se encontro la informacion del cliente'});
+      res.status(500).json({mensaje: 'No fue posible registrar la venta'});
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({mensaje: 'Ocurrio un error'});
+    res.status(500).json({mensaje: 'Ocurrió un error'});
   }
 };
-
 exports.eliminarVenta = async (req, res) => {
   try {
     const resultado = await DataVentas.eliminarVenta(req.params.id, req.body);

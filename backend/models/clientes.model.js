@@ -3,7 +3,7 @@ const SchemnaClientes = new mongoose.Schema({
 
   nombre: {
     type: String,
-    required: [true, 'Se requiere un nombre de usuario'],
+    required: [true, 'Se requiere un nombre de cliente'],
     min: 2,
     max: 30,
   },
@@ -25,7 +25,7 @@ const SchemnaClientes = new mongoose.Schema({
     min: 10,
     max: 13,
   },
-  email: {
+  correo: {
     type: String,
     required: [true, 'Se requiere un correo'],
     unique: true,

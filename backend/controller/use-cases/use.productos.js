@@ -6,7 +6,7 @@ exports.listarProductos = async (req, res) => {
     if (productos.exito === false) {
       res.status(500).json({mensaje: 'No se encontro ningun producto'});
     } else {
-      res.status(200).json({resutados: productos});
+      res.status(200).json(productos);
     }
   } catch (error) {
     console.error(error);
@@ -17,20 +17,13 @@ exports.listarProductos = async (req, res) => {
 exports.actualizarProductos = async (req, res) => {
   try {
     const filtro ={_id: req.params.id};
-    const cantidadPorTallas = req.body.talla;
-    let cantidadTotal= 0;
-    for (const talla in cantidadPorTallas) {
-      if (cantidadPorTallas.hasOwnProperty(talla)) {
-        cantidadTotal += cantidadPorTallas[talla];
-      }
-    }
     const datos= {
       nombre: req.body.nombre,
       talla: req.body.talla,
       referencia: req.body.referencia,
       precio: req.body.precio,
       descripcion: req.body.descripcion,
-      cantidad: cantidadTotal,
+      cantidad: req.body.cantidad,
       categoria: req.body.categoria,
     };
     const producto= await Data.actualizarProducto(filtro, datos);
@@ -56,11 +49,14 @@ exports.guardaProducto = async (req, res) => {
       cantidad: req.body.cantidad,
       categoria: req.body.categoria,
     };
-    await Data.guardaProducto(datos);
+    const nuevoProducto= await Data.guardaProducto(datos);
+    if (!nuevoProducto) {
+      res.status(500).json({mensaje: 'No se pudo guardar el producto capa 1'});
+    }
     res.status(200).json({mensaje: 'Producto guardado'});
   } catch (error) {
     console.error(error);
-    res.status(500).json({mensaje: 'Ocurrio un error'});
+    res.status(500).json({mensaje: 'Ocurrio un error', error});
   }
 };
 
@@ -75,15 +71,6 @@ exports.eliminarProducto = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-
-    res.status(500).json({mensaje: 'Ocurrio un error'});
+    res.status(500).json({mensaje: 'Ocurrio un error', error});
   }
 };
-
-// exports.paginaInicioPrueba = async (req, res) => {
-//   const filtro = {nombre: req.body.nombre};
-//   res.render('inicio', {
-//     productos: await Data.buscarProducto(),
-//     filtroProductos: await Data.buscarProducto(filtro),
-//   });
-// };
