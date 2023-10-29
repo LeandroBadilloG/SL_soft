@@ -1,9 +1,9 @@
 const mongoose = require('../config/config.bd');
 
 const SchemaUsuarios = new mongoose.Schema({
-  correo: {
+  email: {
     type: String,
-    required: [true, 'Se requiere un correo'],
+    required: [true, 'Se requiere un email'],
     unique: true,
   },
   password: {

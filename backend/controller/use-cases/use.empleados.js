@@ -1,6 +1,12 @@
 const DataEmpleados = require('../data-access/data.empleados');
 const DataUsuarios= require('../data-access/data.usuarios');
 
+exports.formularioEmpleado = async (req, res) => {
+  const listaEmpleados= await DataEmpleados.buscarEmpleados();
+  res.render('formularioEmpleado', {
+    empleados: listaEmpleados,
+  });
+};
 
 exports.listarEmpleado = async (req, res) => {
   try {
@@ -23,7 +29,7 @@ exports.actualizarEmpleado = async (req, res) => {
       nombre: req.body.nombre,
       apellido: req.body.apellido,
       documento: req.body.documento,
-      correo: req.body.correo,
+      email: req.body.email,
       cargo: req.body.cargo,
       estado: req.body.estado,
     };
@@ -32,7 +38,7 @@ exports.actualizarEmpleado = async (req, res) => {
       return res.status(500).json({mensaje: 'No fue Posile actualizar el empleado'});
     } else {
       const datos= {
-        correo: req.body.correo,
+        email: req.body.email,
         password: req.body.password,
         rol: req.body.rol,
       };
@@ -51,35 +57,35 @@ exports.actualizarEmpleado = async (req, res) => {
 
 exports.registrarEmpleado = async (req, res) => {
   try {
-    const filtro= {correo: req.body.correo};
-
-    const verificacion= await DataEmpleados.buscarEmpleados(filtro);
-
-    if (verificacion.exito) {
-      return res.status(500).json({mensaje: 'El correo ya esta en uso'});
+    console.log(req.body);
+    const filtro= {email: req.body.email};
+    const verificarEmpleado= await DataEmpleados.buscarEmpleados(filtro);
+    const verificarUsuario= await DataUsuarios.buscarUsuario(filtro);
+    if (verificarEmpleado.length > 0 || verificarUsuario.length > 0) {
+      return res.status(500).json({mensaje: 'El email ya esta en uso'});
     } else {
       const datosEmpleado= {
         nombre: req.body.nombre,
         apellido: req.body.apellido,
         documento: req.body.documento,
-        correo: req.body.correo,
+        email: req.body.email,
         cargo: req.body.cargo,
+        estado: req.body.estado,
       };
       const nuevoEmpleado = await DataEmpleados.registrarEmpleados(datosEmpleado);
-
-      if (nuevoEmpleado.exito) {
+      if (nuevoEmpleado) {
         const datosUsuario= {
-
-          _id: nuevoEmpleado.dato._id,
-          correo: req.body.correo,
+          _id: nuevoEmpleado._id,
+          email: req.body.email,
           password: req.body.password,
           rol: req.body.rol,
         };
+        console.log('datos enviados Usuario: '+{datosUsuario});
         const usuario= await DataUsuarios.guardaUsuario(datosUsuario);
-        if (usuario.exito === false) {
+        if (!usuario) {
           return res.status(500).json({mensaje: 'No fue posible guardar el usuario'});
         } else {
-          return res.status(200).json({mensaje: 'Empleado registrado'});
+          res.send('Cliente registrado');
         }
       }
     }

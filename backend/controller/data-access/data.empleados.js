@@ -5,7 +5,7 @@ exports.buscarEmpleados = async (filtro, opciones) => {
   try {
     const empleados = await Empleados.find(filtro, opciones);
     if (empleados.length > 0) {
-      return {exito: true, dato: empleados};
+      return empleados;
     } else {
       return {exito: false, error: 'No se encontraron empleados registrados'};
     }
@@ -19,9 +19,9 @@ exports.registrarEmpleados = async (datos) => {
   try {
     const empleado = await new Empleados(datos).save();
     if (empleado) {
-      return {exito: true, dato: empleado};
+      return empleado;
     } else {
-      return {exito: false, error: 'No fue posible guardar el empleado'};
+      return {error: 'No fue posible guardar el empleado'};
     }
   } catch (error) {
     console.error('Error al registrar empleado:', error);

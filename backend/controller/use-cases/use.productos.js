@@ -1,5 +1,9 @@
 const Data = require('../data-access/data.productos');
 
+exports.formularioProducto = (req, res) => {
+  res.render('formularioProducto');
+};
+
 exports.listarProductos = async (req, res) => {
   try {
     const productos = await Data.buscarProducto();

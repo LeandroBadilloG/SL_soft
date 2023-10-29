@@ -18,9 +18,9 @@ exports.guardaUsuario = async (datos) => {
   try {
     const usuario = await new Usuarios(datos).save();
     if (usuario) {
-      return {exito: true, dato: usuario};
+      return usuario;
     } else {
-      return {exito: false, error: 'No fue posible guardar el usuario'};
+      return {error: 'No fue posible guardar el usuario'};
     }
   } catch (error) {
     console.error('Error al registrar usuario:', error);

@@ -32,7 +32,7 @@ exports.guardaVenta = async (req, res) => {
     const idCliente = {_id: req.body.cliente};
     const datosNoRequeridos = {updatedAt: 0, createdAt: 0, _id: 0, __v: 0};
 
-    const infoCliente = await DataCliente.buscarCliente(idCliente, datosNoRequeridos);
+    const infoCliente = await DataCliente.listarCliente(idCliente, datosNoRequeridos);
 
     if (!infoCliente) {
       return res.status(500).json({mensaje: 'No se encontró la información del cliente'});
@@ -40,7 +40,7 @@ exports.guardaVenta = async (req, res) => {
 
     const productos = req.body.productos;
     const listaProductos = [];
-
+    let total= 0;
     for (const productoId of productos) {
       const filtro = {_id: productoId};
       const datosProducto = {cantidad: 0, _id: 0, __v: 0, updatedAt: 0, createdAt: 0};
@@ -50,18 +50,19 @@ exports.guardaVenta = async (req, res) => {
       if (!producto) {
         return res.status(500).json({mensaje: 'No se encontró la información del producto'});
       }
-
-      listaProductos.push({
-        nombre: producto.nombre,
-        talla: producto.talla,
-      });
+      console.log(producto);
+      total+= producto.precio;
+      listaProductos.push(producto);
     }
 
+    console.log(total);
+
+    const iva = parseFloat(total * 19) / 100;
     const ventaData = {
       cliente: infoCliente,
       productos: listaProductos,
-      subtotal: req.body.subtotal,
-      totalPago: req.body.totalPago,
+      subtotal: total,
+      totalPago: total + iva,
       metodoPago: req.body.metodoPago,
     };
 
@@ -77,6 +78,7 @@ exports.guardaVenta = async (req, res) => {
     res.status(500).json({mensaje: 'Ocurrió un error'});
   }
 };
+
 exports.eliminarVenta = async (req, res) => {
   try {
     const resultado = await DataVentas.eliminarVenta(req.params.id, req.body);

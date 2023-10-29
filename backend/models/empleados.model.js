@@ -19,9 +19,9 @@ const SchemaEmpleados = new mongoose.Schema({
     unique: true,
     minlength: 7,
   },
-  correo: {
+  email: {
     type: String,
-    required: [true, 'Se requiere un correo'],
+    required: [true, 'Se requiere un email'],
     unique: true,
   },
   cargo: {
@@ -29,7 +29,7 @@ const SchemaEmpleados = new mongoose.Schema({
     required: [true, 'Se debe especificar qué cargo tiene el trabajador'],
   },
   estado: {
-    type: Boolean,
+    type: String,
     default: true,
   },
   usuario: {
