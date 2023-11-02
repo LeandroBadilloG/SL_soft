@@ -25,7 +25,7 @@ const SchemnaClientes = new mongoose.Schema({
     min: 10,
     max: 13,
   },
-  correo: {
+  email: {
     type: String,
     required: [true, 'Se requiere un correo'],
     unique: true,

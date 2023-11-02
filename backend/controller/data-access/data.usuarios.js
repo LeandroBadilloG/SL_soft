@@ -4,7 +4,7 @@ exports.buscarUsuario = async (filtro, opciones) => {
   try {
     const usuarios = await Usuarios.find(filtro, opciones);
     if (usuarios.length > 0) {
-      return {exito: true, dato: usuarios};
+      return {exito: true, usuarios};
     } else {
       return {exito: false, error: 'No se encontro ningun usuario'};
     }
@@ -18,9 +18,9 @@ exports.guardaUsuario = async (datos) => {
   try {
     const usuario = await new Usuarios(datos).save();
     if (usuario) {
-      return usuario;
+      return {exito: true, usuario};
     } else {
-      return {error: 'No fue posible guardar el usuario'};
+      return {exito: false, error: 'No fue posible guardar el usuario'};
     }
   } catch (error) {
     console.error('Error al registrar usuario:', error);
@@ -46,12 +46,12 @@ exports.actualizarUsuario = async (id, datos) => {
   try {
     const usuario = await Usuarios.findOneAndUpdate(id, datos);
     if (usuario) {
-      return {exito: true, dato: usuario};
+      return {exito: true, usuario};
     } else {
       return {exito: false, error: 'No fue posible actualizar el usuario'};
     }
   } catch (error) {
     console.error('Error al actualizar usuario:', error);
-    return {exito: false, error: 'Error al actualizar usuario'};
+    return {exito: false, error};
   }
 };

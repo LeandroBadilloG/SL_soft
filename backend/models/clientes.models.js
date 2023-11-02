@@ -3,19 +3,27 @@ const SchemaClientes = new mongoose.Schema({
 
   nombre: {
     type: String,
-    require: [true, 'Se requiere un nombre de usuario'],
+    required: [true, 'Se requiere un nombre de cliente'],
+    min: 2,
+    max: 30,
   },
   apellido: {
     type: String,
-    require: [true, 'Se requiere un apellido del cliente'],
+    required: [true, 'Se requiere un apellido del cliente'],
+    min: 2,
+    max: 30,
   },
   documento: {
     type: String,
-    require: [true, 'Se requiere un documento del cliente'],
+    required: [true, 'Se requiere un documento del cliente'],
+    unique: true,
+    min: 7,
   },
   celular: {
     type: String,
     default: 'Sin registrar numero celular',
+    min: 10,
+    max: 13,
   },
   email: {
     type: String,

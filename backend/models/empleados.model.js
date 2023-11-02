@@ -5,13 +5,13 @@ const SchemaEmpleados = new mongoose.Schema({
     type: String,
     required: [true, 'Se requiere un nombre del empleado.'],
     minlength: 2,
-    maxlength: 30,
+    maxlength: 80,
   },
   apellido: {
     type: String,
     required: [true, 'Se requiere un apellido del empleado'],
     minlength: 2,
-    maxlength: 30,
+    maxlength: 80,
   },
   documento: {
     type: String,

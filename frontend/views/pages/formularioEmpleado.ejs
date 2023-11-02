@@ -10,7 +10,6 @@
 </head>
 
 <body>
-    <script>$(document).ready(function () { new DataTable('#table_id', { stateSave: true }) });</script>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="p">
         <div class="container">
             <a class="navbar-brand" href="#">SK-soft </a>
@@ -82,19 +81,19 @@
                                         <div class="form-group ">
                                             <label for="nombre" class="form-label mt-2">NOMBRE</label>
                                             <input type="text" class="form-control" name="nombre" required
-                                                placeholder="Juan Camilo">
+                                                placeholder="Juan Camilo" min="2" max="80">
                                             <label for="apellido" class="form-label mt-2">APELLIDO</label>
                                             <input type="text" class="form-control" name="apellido" required
-                                                placeholder="Martinez Mora">
+                                                placeholder="Martinez Mora" min="2" max="80">
                                             <label for="documento" class="form-label mt-2">DOCUMENTO</label>
-                                            <input type="number" class="form-control" name="documento" required>
+                                            <input type="number" class="form-control" name="documento" required min="7">
                                             <div class="row mt-2">
                                                 <label class="form-label">ESTADO</label>
                                                 <div class="form-check col-md-3 mx-3">
                                                     <input class="form-check-input" type="radio" name="estado" id="activo" value="true">
                                                     <label class="form-check-label" for="activo">Activo</label>
                                                 </div>
-                                                <div class="form-check col-md-3">
+                                                <div class="form-check col-md-3 mx-3">
                                                     <input class="form-check-input" type="radio" name="estado" id="inactivo" value="false">
                                                     <label class="form-check-label" for="inactivo">Inactivo</label>
                                                 </div>
@@ -108,7 +107,7 @@
                                             <label for="email" class="form-label mt-2">CORREO</label>
                                             <input type="email" class="form-control" name="email" required>
                                             <label for="password" class="form-label mt-2">CONTRASEÑA</label>
-                                            <input type="password" class="form-control" name="password" required>
+                                            <input type="password" class="form-control" name="password" min="8" required autocomplete="current-password">
                                             <input type="text" name="rol" value="Empleado" hidden>
                                         </div>
                                     </div>
@@ -140,38 +139,207 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%empleados.forEach ( function ( elemento ) {%>
-                                <tr>
-                                    <td>
-                                        <%=elemento.nombre%>
-                                    </td>
-                                    <td>
-                                        <%=elemento.cargo%>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                            data-bs-target="#modalEliminar"
-                                            onclick="eliminarUsuario(`<%=elemento._id%>`,`<%=elemento.nombreUsuario%>`)">Eliminar</button>
-                                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                            data-bs-target="#modalActualizarUsuario"
-                                            onclick="llamarDatosUsuario(`<%=elemento.nombreUsuario%>`,`<%=elemento.apellidosUsuario%>`,`<%=elemento.telefonoUsuario%>`,`<%=elemento.correoUsuario%>`,`<%=elemento.ubicacionUsuario%>`,`<%=elemento.documentoUsuario%>`,`<%=elemento._id%>`)">Editar</button>
-                                    </td>
-                                </tr>
-                                <%})%>
+                            <%if(empleados.length > 0){%>
+                                <%empleados.forEach ( function ( elemento ) {%>
+                                    <tr>
+                                        <td>
+                                            <%=elemento.nombre%>
+                                        </td>
+                                        <td>
+                                            <%=elemento.cargo%>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-danger" onclick="datosEmpleado(`<%=elemento._id%>`,`<%=elemento.nombre%>`)" data-bs-toggle="modal" data-bs-target="#modalEliminar">
+                                                Eliminar
+                                              </button>
+                                            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#modalActualizar"
+                                                onclick="datosEmpleado(`<%=elemento._id%>`,`<%=elemento.nombre%>`,`<%=elemento.apellido%>`,`<%=elemento.documento%>`,`<%=elemento.email%>`,`<%=elemento.cargo%>`,`<%=elemento.estado%>`)">Editar</button>
+
+                                            <button type="button" class="btn btn-outline-info" onclick="mostrarInformacion(`<%=elemento._id%>`,`<%=elemento.nombre%>`,`<%=elemento.apellido%>`,`<%=elemento.documento%>`,`<%=elemento.email%>`,`<%=elemento.cargo%>`,`<%=elemento.estado%>`)" >Ver</button>    
+                                        </td>
+                                    </tr>
+                                    <%})%>
+                              <%}else{%>
+                                <div class="alert alert-danger text-center p-1" role="alert">
+                                   <p class="mt-2">NO SE ENCONTRARON EMPLEADOS</p>
+                                </div>
+                              <%}%>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="col-md-5 border mx-2">
-                <div class="card-header ">
-                    <h4 class="text-center"></h4>
-                </div>
-
+            <div id="perfilEmleado" class="col-md-5">
             </div>
         </div>
     </div>
     </div>
 
+
+
+  
+  <!-- Modal Eliminar -->
+  <div class="modal fade" id="modalEliminar" tabindex="-1" aria-labelledby="modalEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="modalEliminarLabel">Eliminar</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="contenidoElimiar" class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <form id="eliminar" method="get">
+                <button type="button" class="btn btn-secondary"
+                    data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Eliminar</button>
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Actualizar -->
+  <div class="modal fade" id="modalActualizar" tabindex="-1" aria-labelledby="modalActualizarLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="modalActualizarLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form id="actualizar" method="post">
+                <div class="form-group ">
+                    <label for="nombre" class="form-label mt-2">NOMBRE</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" required
+                        placeholder="Juan Camilo" min="2" max="80">
+                    <label for="apellido" class="form-label mt-2">APELLIDO</label>
+                    <input type="text" class="form-control" id="apellido" name="apellido" required
+                        placeholder="Martinez Mora" min="2" max="80">
+                    <label for="documento" class="form-label mt-2">DOCUMENTO</label>
+                    <input type="number" class="form-control" id="documento" name="documento" required min="7">
+                    <div class="row mt-2">
+                        <label class="form-label">ESTADO</label>
+                        <div class="form-check col-md-3 mx-3">
+                            <input class="form-check-input" type="radio" name="estado" id="estadoActivo" value="true">
+                            <label class="form-check-label" for="estadoActivo">Activo</label>
+                        </div>
+                        <div class="form-check col-md-3 mx-3">
+                            <input class="form-check-input" type="radio"  name="estado" id="estadoInactivo" value="false">
+                            <label class="form-check-label" for="estadoInactivo">Inactivo</label>
+                        </div>
+                    </div>
+                    <label for="cargo" class="form-label mt-2">CARGO</label>
+                    <input type="text" class="form-control" id="cargo" name="cargo" required>
+                    <label for="email" class="form-label mt-2">CORREO</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                    <input type="text" name="rol" value="Empleado" hidden>
+                </div>
+                <div class="form-group text-center ">
+                    <input type="submit" class="btn btn-primary px-5 mt-5 " value="Actualizar">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    <script>
+        function datosEmpleado(idEmpleado, nombreEmpleado, apellidoEmpleado, documentoEmpleado, emailEmpleado, cargoEmpleado, estadoEmpleado){
+            contenidoElimiar.innerHTML=``;
+            contenidoElimiar.innerHTML=`
+            <p>¿Estás seguro de que quieres eliminar a <samp class="text-danger">${nombreEmpleado}</samp> ?</p>
+            `;
+            eliminar.setAttribute('action', `/v1/eliminarEmpleado/${idEmpleado}`);
+            actualizar.setAttribute('action', `/v1/actualizarEmpleado/${idEmpleado}`);
+            nombre.value=nombreEmpleado;
+            apellido.value=apellidoEmpleado;
+            documento.value=documentoEmpleado;
+            email.value=emailEmpleado;
+            cargo.value=cargoEmpleado;
+            if(estadoEmpleado === 'true'){
+                estadoActivo.checked = true;;
+            }else {
+                estadoInactivo.checked = true;;
+            }
+        }
+
+        function mostrarInformacion(idEmpleado, nombreEmpleado, apellidoEmpleado, documentoEmpleado, emailEmpleado, cargoEmpleado, estadoEmpleado) {
+        perfilEmleado.innerHTML=``;
+        var estadoActual='';
+        if(estadoEmpleado === 'true'){
+            estadoActual='Activo'
+            }else {
+                estadoActual='Inactivo'
+            }
+        var cardDiv = document.createElement('div');
+        cardDiv.classList.add('card');
+
+        // Crear la estructura interna con clases de Bootstrap
+        var rowDiv = document.createElement('div');
+        rowDiv.classList.add('row');
+
+        var col1Div = document.createElement('div');
+        col1Div.classList.add('col-md-4', 'm-2');
+
+        var img = document.createElement('img');
+        img.setAttribute('src', 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=600');
+        img.setAttribute('width', '150px');
+        img.setAttribute('height', '150px');    
+        img.classList.add('rounded');
+        img.setAttribute('alt', 'Foto del empleado');
+        col1Div.appendChild(img);
+
+        var col2Div = document.createElement('div');
+        col2Div.classList.add('col-md-5', 'mt-5');
+
+        var nameHeader = document.createElement('h5');
+        nameHeader.textContent = nombreEmpleado +' '+ apellidoEmpleado;
+
+        var jobParagraph = document.createElement('p');
+        jobParagraph.textContent = cargoEmpleado;
+
+        col2Div.appendChild(nameHeader);
+        col2Div.appendChild(jobParagraph);
+
+        rowDiv.appendChild(col1Div);
+        rowDiv.appendChild(col2Div);
+
+        var cardBodyDiv = document.createElement('div');
+        cardBodyDiv.classList.add('card-body');
+
+        var cardTextParagraph = document.createElement('p');
+        cardTextParagraph.classList.add('card-text');
+
+        var listGroup = document.createElement('ul');
+        listGroup.classList.add('list-group', 'list-group-flush');
+
+        var listItem1 = document.createElement('li');
+        listItem1.classList.add('list-group-item');
+        listItem1.textContent = 'Estado: ' + estadoActual;
+
+        var listItem2 = document.createElement('li');
+        listItem2.classList.add('list-group-item');
+        listItem2.textContent = 'Correo: ' + emailEmpleado;
+
+        var listItem3 = document.createElement('li');
+        listItem3.classList.add('list-group-item');
+        listItem3.textContent = 'Documento: ' + documentoEmpleado;
+
+        listGroup.appendChild(listItem1);
+        listGroup.appendChild(listItem2);
+        listGroup.appendChild(listItem3);
+
+        cardBodyDiv.appendChild(cardTextParagraph);
+        cardBodyDiv.appendChild(listGroup);
+
+        cardDiv.appendChild(rowDiv);
+        cardDiv.appendChild(cardBodyDiv);
+
+        perfilEmleado.appendChild(cardDiv);
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>

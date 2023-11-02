@@ -4,23 +4,27 @@ exports.buscarProducto = async (filtro, opciones) => {
   try {
     const productos = await Productos.find(filtro, opciones);
     if (productos.length > 0) {
-      return productos;
+      return {exito: true, productos};
     } else {
-      return {exito: false, dato: productos};
+      return {exito: false, error: 'No se encontro ningun empleado registrado'};
     }
   } catch (error) {
     console.error('Error al buscar los Productos:', error);
-    return {exito: false, error: 'Error al buscar Productos'};
+    return {exito: false, error};
   }
 };
 
 exports.guardaProducto = async (datos) => {
   try {
     const productos = await new Productos(datos).save();
-    return productos;
+    if (productos) {
+      return {exito: true, productos};
+    } else {
+      return {exito: false, error: 'no se pudo registrar el productos'};
+    }
   } catch (error) {
     console.error('Error al registrar Producto:', error);
-    return {exito: false, error: 'Error al registrar Producto'};
+    return {exito: false, error};
   }
 };
 
@@ -34,7 +38,7 @@ exports.eliminarProducto = async (filtro) => {
     }
   } catch (error) {
     console.error('Error al eliminar producto:', error);
-    return {exito: false, error: 'Error al eliminar producto'};
+    return {exito: false, error};
   }
 };
 

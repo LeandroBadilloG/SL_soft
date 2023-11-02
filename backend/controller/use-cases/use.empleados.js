@@ -2,16 +2,21 @@ const DataEmpleados = require('../data-access/data.empleados');
 const DataUsuarios= require('../data-access/data.usuarios');
 
 exports.formularioEmpleado = async (req, res) => {
-  const listaEmpleados= await DataEmpleados.buscarEmpleados();
-  res.render('formularioEmpleado', {
-    empleados: listaEmpleados,
-  });
+  try {
+    const listaEmpleados= await DataEmpleados.buscarEmpleados();
+    res.render('formularioEmpleado', {
+      empleados: listaEmpleados.empleados,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({mensaje: 'Ocurrio un error.'});
+  }
 };
 
 exports.listarEmpleado = async (req, res) => {
   try {
     const empleados = await DataEmpleados.buscarEmpleados();
-    if (empleados.exito === false) {
+    if (empleados.exito===false) {
       res.status(500).json({mensaje: 'No se encontro empleados registrados'});
     } else {
       res.status(200).json({resultados: empleados});
@@ -33,20 +38,21 @@ exports.actualizarEmpleado = async (req, res) => {
       cargo: req.body.cargo,
       estado: req.body.estado,
     };
-    const empleado= await DataEmpleados.actualizarEmpleados(filtro, datos);
-    if (empleado.exito === false) {
+    const empleado = await DataEmpleados.actualizarEmpleados(filtro, datos);
+    if (empleado.exito===false) {
       return res.status(500).json({mensaje: 'No fue Posile actualizar el empleado'});
     } else {
+      const datosUsuario= await DataUsuarios.buscarUsuario(filtro);
       const datos= {
         email: req.body.email,
-        password: req.body.password,
+        password: datosUsuario.usuarios.password,
         rol: req.body.rol,
       };
       const usuario= await DataUsuarios.actualizarUsuario(filtro, datos);
-      if (usuario.exito) {
-        return res.status(200).json({mensaje: 'Empleado actualizado'});
-      } else {
+      if (usuario.exito===false) {
         return res.status(500).json({mensaje: 'No fue Posile actualizar el usuario'});
+      } else {
+        res.redirect('/v1/registroEmpleado');
       }
     }
   } catch (error) {
@@ -57,11 +63,10 @@ exports.actualizarEmpleado = async (req, res) => {
 
 exports.registrarEmpleado = async (req, res) => {
   try {
-    console.log(req.body);
     const filtro= {email: req.body.email};
     const verificarEmpleado= await DataEmpleados.buscarEmpleados(filtro);
     const verificarUsuario= await DataUsuarios.buscarUsuario(filtro);
-    if (verificarEmpleado.length > 0 || verificarUsuario.length > 0) {
+    if (verificarEmpleado.exito===true || verificarUsuario.exito===true) {
       return res.status(500).json({mensaje: 'El email ya esta en uso'});
     } else {
       const datosEmpleado= {
@@ -73,19 +78,21 @@ exports.registrarEmpleado = async (req, res) => {
         estado: req.body.estado,
       };
       const nuevoEmpleado = await DataEmpleados.registrarEmpleados(datosEmpleado);
-      if (nuevoEmpleado) {
+      if (nuevoEmpleado.exito === false) {
+        return res.status(500).json({mensaje: 'No fue posible registrar el empleado'});
+      } else {
         const datosUsuario= {
-          _id: nuevoEmpleado._id,
+          _id: nuevoEmpleado.empleado._id,
           email: req.body.email,
           password: req.body.password,
           rol: req.body.rol,
         };
         console.log('datos enviados Usuario: '+{datosUsuario});
         const usuario= await DataUsuarios.guardaUsuario(datosUsuario);
-        if (!usuario) {
+        if (usuario.exito===false) {
           return res.status(500).json({mensaje: 'No fue posible guardar el usuario'});
         } else {
-          res.send('Cliente registrado');
+          res.redirect('/v1/registroEmpleado');
         }
       }
     }
@@ -106,7 +113,7 @@ exports.eliminarEmpleado = async (req, res) => {
       if (usuario.exito == false) {
         res.status(500).json({mensaje: 'No fue posible eliminar el usuario'});
       } else {
-        res.status(200).json({mensaje: 'Empleado eliminado'});
+        res.redirect('/v1/registroEmpleado');
       }
     }
   } catch (error) {
