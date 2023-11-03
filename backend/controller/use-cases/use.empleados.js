@@ -6,6 +6,7 @@ exports.formularioEmpleado = async (req, res) => {
     const listaEmpleados= await DataEmpleados.buscarEmpleados();
     res.render('formularioEmpleado', {
       empleados: listaEmpleados.empleados,
+      datos: listaEmpleados.exito,
     });
   } catch (error) {
     console.error(error);

@@ -86,7 +86,7 @@
                                             <input type="text" class="form-control" name="apellido" required
                                                 placeholder="Martinez Mora" min="2" max="80">
                                             <label for="documento" class="form-label mt-2">DOCUMENTO</label>
-                                            <input type="number" class="form-control" name="documento" required min="7">
+                                            <input type="number" class="form-control" name="documento" required min="10">
                                             <div class="row mt-2">
                                                 <label class="form-label">ESTADO</label>
                                                 <div class="form-check col-md-3 mx-3">
@@ -139,7 +139,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <%if(empleados.length > 0){%>
+                            <%if(datos === true ){%>
                                 <%empleados.forEach ( function ( elemento ) {%>
                                     <tr>
                                         <td>

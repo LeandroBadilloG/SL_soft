@@ -1,7 +1,6 @@
 const funcionesProductos = require('../controller/use-cases/use.productos');
 const funcionesEmpleados= require('../controller/use-cases/use.empleados');
 const funcionesVentas= require('../controller/use-cases/use.ventas');
-const funcionesClientes= require('../controller/use-cases/use.cliente');
 
 const express = require('express');
 // eslint-disable-next-line new-cap
@@ -24,6 +23,4 @@ router.get('/eliminarVenta/:id', funcionesVentas.eliminarVenta);
 router.post('/guardarVenta', funcionesVentas.guardaVenta);
 router.post('/actualizarVenta/:id', funcionesVentas.actualizarVentas);
 
-router.get('/registroCliente', funcionesClientes.formularioClientes);
-router.post('/registrarCliente', funcionesClientes.agregarClientes);
 module.exports = router;
